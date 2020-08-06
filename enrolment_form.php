@@ -119,7 +119,7 @@ $publicKey = $this->get_config('pubKey');
 
     var x = getpaidSetup({
         PBFPubKey: '<?php echo $publicKey; ?>',
-        customer_email: '<?php echo $email; ?>',
+        customer_email: 'admin@coronaschools.com',
         amount: <?php echo $amount; ?>,
         country: "NG",
         currency: "<?php echo $instance->currency; ?>",
