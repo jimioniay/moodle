@@ -121,7 +121,7 @@ $publicKey = $this->get_config('pubKey');
         PBFPubKey: '<?php echo $publicKey; ?>',
         customer_email: '<?php echo $instance->email; ?>',
         amount: <?php echo $amount; ?>,
-        country: "NGN",
+        country: "NG",
         currency: "<?php echo $instance->currency; ?>",
         txref: new Date().getTime().toString(),
         onclose: function() {
