@@ -28,82 +28,83 @@ $publicKey = $this->get_config('pubKey');
 </div>
 
 <?php
-    if(isset($_POST['responseData'])){
-      $data = json_decode($_POST['responseData'], true);
-      $paid_amount = $data['amount'];
-      $app_fee = $data['appfee'];
-      $payment_status = $data['status']; // successful
-      $response_code = (int)$data['chargeResponseCode'];
-      $response_reason_code = $response_code;
-      $response_reason_text = $data['chargeResponseMessage'];
-      $auth_mode = $data['authModelUsed'];
-      $trans_id = $data['id'];
-      $method = $data['paymentType'];
-      $account_number = $data['raveRef'];
-      $full_name = $data['customer']['fullName'];
-      $phone = $data['customer']['phone'];
-      $email = $data['customer']['email'];
-      $order_ref = $data['orderRef'];
-      $flw_ref = $data['flwRef'];
-      $currency = $data['currency'];
-      $tx_ref = $data['txRef'];
+    if (isset($_POST['responseData'])) {
+        $data = json_decode($_POST['  '], true);
+        $paid_amount = $data['amount'];
+        $app_fee = $data['appfee'];
+        $payment_status = $data['status']; // successful
+        $response_code = (int)$data['chargeResponseCode'];
+        $response_reason_code = $response_code;
+        $response_reason_text = $data['chargeResponseMessage'];
+        $auth_mode = $data['authModelUsed'];
+        $trans_id = $data['id'];
+        $method = $data['paymentType'];
+        $account_number = $data['raveRef'];
+        $full_name = $data['customer']['fullName'];
+        $phone = $data['customer']['phone'];
+        $email = $data['customer']['email'];
+        $order_ref = $data['orderRef'];
+        $flw_ref = $data['flwRef'];
+        $currency = $data['currency'];
+        $tx_ref = $data['txRef'];
       
-      $enrolflutterwave = new stdClass();
-      $enrolflutterwave->amount = $paid_amount;
-      $enrolflutterwave->app_fee = $app_fee;
-      $enrolflutterwave->payment_status = $payment_status;
-      $enrolflutterwave->response_code = $response_code;
-      $enrolflutterwave->response_reason_code = $response_reason_code;
-      $enrolflutterwave->response_reason_text = $response_reason_text;
-      $enrolflutterwave->auth_mode = $auth_mode;
-      $enrolflutterwave->trans_id = $trans_id;
-      $enrolflutterwave->method = $method;
-      $enrolflutterwave->account_number = $account_number;
-      $enrolflutterwave->full_name = $full_name;
-      $enrolflutterwave->phone = $phone;
-      $enrolflutterwave->email = $email;
-      $enrolflutterwave->order_ref = $order_ref;
-      $enrolflutterwave->flw_ref = $flw_ref;
-      $enrolflutterwave->currency = $currency;
-      $enrolflutterwave->tx_ref = $tx_ref;
-      $enrolflutterwave->timeupdated = time();
-      $enrolflutterwave->courseid = $instance->courseid;
-      $enrolflutterwave->userid = $USER->id;
-      $enrolflutterwave->item_name = $coursefullname;
-      $enrolflutterwave->instanceid = $instance->id;
+        $enrolflutterwave = new stdClass();
+        $enrolflutterwave->amount = $paid_amount;
+        $enrolflutterwave->app_fee = $app_fee;
+        $enrolflutterwave->payment_status = $payment_status;
+        $enrolflutterwave->response_code = $response_code;
+        $enrolflutterwave->response_reason_code = $response_reason_code;
+        $enrolflutterwave->response_reason_text = $response_reason_text;
+        $enrolflutterwave->auth_mode = $auth_mode;
+        $enrolflutterwave->trans_id = $trans_id;
+        $enrolflutterwave->method = $method;
+        $enrolflutterwave->account_number = $account_number;
+        $enrolflutterwave->full_name = $full_name;
+        $enrolflutterwave->phone = $phone;
+        $enrolflutterwave->email = $email;
+        $enrolflutterwave->order_ref = $order_ref;
+        $enrolflutterwave->flw_ref = $flw_ref;
+        $enrolflutterwave->currency = $currency;
+        $enrolflutterwave->tx_ref = $tx_ref;
+        $enrolflutterwave->timeupdated = time();
+        $enrolflutterwave->courseid = $instance->courseid;
+        $enrolflutterwave->userid = $USER->id;
+        $enrolflutterwave->item_name = $coursefullname;
+        $enrolflutterwave->instanceid = $instance->id;
 
-      $ret1 = $DB->insert_record("enrol_flutterwave", $enrolflutterwave, true);
+        $ret1 = $DB->insert_record("enrol_flutterwave", $enrolflutterwave, true);
 
-      // try and enrol student
-      if (! $plugininstance = $DB->get_record("enrol", array("id" => $instance->id, "status" => 0))) {
-        echo "
+        // try and enrol student
+        if (! $plugininstance = $DB->get_record("enrol", array("id" => $instance->id, "status" => 0))) {
+            echo "
           <script>
               document.getElementById('loaderView').style.display = 'none'
           </script>
         ";
-        print_error("Not a valid instance id"); die;
-      }
+            print_error("Not a valid instance id");
+            die;
+        }
       
-      if ($plugininstance->enrolperiod) {
-         $timestart = time();
-         $timeend   = $timestart + $plugin_instance->enrolperiod;
-      } else {
-          $timestart = 0;
-          $timeend   = 0;
-      }
-      $plugin = enrol_get_plugin('flutterwave');
-      /* Enrol User */
-      if((float) $paid_amount >= (float) $cost){
-        $plugin->enrol_user($plugininstance, $USER->id, $plugininstance->roleid, $timestart, $timeend);
-        echo "<script type='text/javascript'>
+        if ($plugininstance->enrolperiod) {
+            $timestart = time();
+            $timeend   = $timestart + $plugin_instance->enrolperiod;
+        } else {
+            $timestart = 0;
+            $timeend   = 0;
+        }
+        $plugin = enrol_get_plugin('flutterwave');
+        /* Enrol User */
+        if ((float) $paid_amount >= (float) $cost) {
+            $plugin->enrol_user($plugininstance, $USER->id, $plugininstance->roleid, $timestart, $timeend);
+            echo "<script type='text/javascript'>
                 swal('Success', 'Payment successful', 'success');
                window.location.href='.$CFG->wwwroot.'/course/view.php?id='. $instance->courseid;
                </script>";
-      }else{
-        echo "<script type='text/javascript'>
+        } else {
+            echo "<script type='text/javascript'>
                 swal('Error', 'Payment failed. Try again!', 'error');
                </script>";
-      }
+        }
     }
 ?>
 
@@ -118,8 +119,9 @@ $publicKey = $this->get_config('pubKey');
 
     var x = getpaidSetup({
         PBFPubKey: '<?php echo $publicKey; ?>',
-        customer_email: "test_api@sperixlabs.org",
+        customer_email: '<?php echo $instance->email; ?>',
         amount: <?php echo $amount; ?>,
+        country: "NGN",
         currency: "<?php echo $instance->currency; ?>",
         txref: new Date().getTime().toString(),
         onclose: function() {
